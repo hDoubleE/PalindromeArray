@@ -1,6 +1,0 @@
-C:\Users\trevo\source\repos\PalindromeArray\PalindromeArray\bin\Debug\PalindromeArray.dll
-C:\Users\trevo\source\repos\PalindromeArray\PalindromeArray\bin\Debug\PalindromeArray.pdb
-C:\Users\trevo\source\repos\PalindromeArray\PalindromeArray\obj\Debug\PalindromeArray.csprojAssemblyReference.cache
-C:\Users\trevo\source\repos\PalindromeArray\PalindromeArray\obj\Debug\PalindromeArray.csproj.CoreCompileInputs.cache
-C:\Users\trevo\source\repos\PalindromeArray\PalindromeArray\obj\Debug\PalindromeArray.dll
-C:\Users\trevo\source\repos\PalindromeArray\PalindromeArray\obj\Debug\PalindromeArray.pdb
