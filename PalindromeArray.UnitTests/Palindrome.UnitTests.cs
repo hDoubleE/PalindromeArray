@@ -7,6 +7,17 @@ namespace PalindromeArray.UnitTests
     public class PalindromeUnitTests
     {
         [TestMethod]
+        public void Check_Empty_Input()
+        {
+            // Arrange
+            Palindrome check = new Palindrome();
+            char[] arrToCheck = check.PalindromeHelper("");
+            // Act
+            bool boolResultOfPalindromeCheck = check.IsArrayPalindrome(arrToCheck);
+            // Assert
+            Assert.AreEqual(false, boolResultOfPalindromeCheck);
+        }
+        [TestMethod]
         public void Check_Longest_Palindrome_In_Dictionary()
         {
             // Arrange
