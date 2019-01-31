@@ -1,6 +1,10 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
+// Added a test for Empty Input.
+// Created branch
+
+
 namespace PalindromeArray.UnitTests
 {
     [TestClass]
