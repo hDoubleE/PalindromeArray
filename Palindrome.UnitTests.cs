@@ -1,117 +1,139 @@
 ﻿using System;
+using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-// Added a test for Empty Input.
-// Created branch 'review' for PR sharing.
-
-
-namespace PalindromeArray.UnitTests
+namespace Palindrome.UnitTests
 {
     [TestClass]
-    public class PalindromeUnitTests
+    public sealed class PalindromeUnitTests
     {
+        /* 
+        *  Test class contains 3 helper methods.
+        *  Passing 6/6 test cases.
+        */
+
+        /// <summary>
+        /// Generates a random string of upper and lower case letters including ' '.
+        /// Passes result string to RandomPalindromeGenerator.
+        /// </summary>
+        /// <returns>A string containing less than 1000 characters.</returns>
+        private static string RandomString()
+        {
+            Random rand = new Random();
+            int length = rand.Next(0, 999);
+
+            char[] arr = new char[length];
+            string allowedChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz ";
+
+            for (int i = 0; i < arr.Length; i++)
+            {
+                arr[i] = allowedChars[rand.Next(0, allowedChars.Length)];
+            }
+            return new string(arr);
+        }
+
+        /// <summary>
+        /// Calls RandomString and creates Palindrome double the length of string.
+        /// Loops beginning to end adding each char to StringBuilder object.
+        /// Then loops back to front adding to StringBuiilder in reverse.
+        /// </summary>
+        /// <returns>String that is a palindrome less tha 2000 characters.</returns>
+        private static string RandomPalindromeGenerator()
+        {
+            Random rand = new Random();
+            StringBuilder sb = new StringBuilder();
+
+            string randomString = RandomString();
+
+            // Random string has even character count.
+            // Generates even numbered palindrome.
+            if (randomString.Length % 2 == 0)
+            {
+                for (int i = 0; i < randomString.Length; i++)
+                {
+                    sb.Append(randomString[i]);
+                }
+                for (int i = randomString.Length - 1; i >= 0; i--)
+                {
+                    sb.Append(randomString[i]);
+                }
+            }
+            // String has odd character count. 
+            // Make odd palidrome with a central "pivot" character.
+            else
+            {
+                for (int i = 0; i < randomString.Length; i++)
+                {
+                    sb.Append(randomString[i]);
+                }
+                // Skip last character on reverse leaving singleton as pivot.
+                for (int i = randomString.Length - 2; i >= 0; i--)
+                {
+                    sb.Append(randomString[i]);
+                }
+            }
+            return sb.ToString();
+        }
+
+        /// <summary>
+        /// Auto generates unit test cases to avoid code repetition.
+        /// </summary>
+        /// <param name="input">String to test for being palindrome.</param>
+        /// <param name="expectedOutput">Expected bool result of palindrome test.</param>
+        private static void RunIsPalindromeTest(string input, bool expectedOutput)
+        {
+            //Arrange
+            Palindrome unit = new Palindrome();
+            // Act
+            bool actualResult = unit.IsPalindrome(input);
+            // Asert 
+            Assert.AreEqual(expectedOutput, actualResult, $"{nameof(unit.IsPalindrome)}(\"{input}\")");
+        }
+
         [TestMethod]
-        public void Check_Empty_Input()
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void Test_Null_Input()
         {
             // Arrange
-            Palindrome check = new Palindrome();
-            char[] arrToCheck = check.PalindromeHelper("");
+            Palindrome unit = new Palindrome();
             // Act
-            bool boolResultOfPalindromeCheck = check.IsArrayPalindrome(arrToCheck);
-            // Assert
-            Assert.AreEqual(false, boolResultOfPalindromeCheck);
+            unit.IsPalindrome(null);
+            // Assert: Expects Exception.
         }
+
         [TestMethod]
-        public void Check_Longest_Palindrome_In_Dictionary()
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void Test_Empty_Input()
         {
-            Palindrome check = new Palindrome();
-            // The longest palindromic word in the Oxford English Dictionary is "tattarrattat", 
-            // coined by James Joyce in Ulysses (1922) for a knock on the door.
-            char[] arrToCheck = check.PalindromeHelper("tattarrattat");
-
-            bool boolResultOfPalindromeCheck = check.IsArrayPalindrome(arrToCheck);
-
-            Assert.AreEqual(true, boolResultOfPalindromeCheck);
+            // Arrange
+            Palindrome unit = new Palindrome();
+            // Act
+            unit.IsPalindrome(String.Empty);
+            // Assert: Expects Exception.
         }
+
         [TestMethod]
-        public void Check_Odd_Palindrome_One()
+        public void Test_Randomly_Generated_Palindrome()
         {
-            Palindrome check = new Palindrome();
-            char[] arrToCheck = check.PalindromeHelper("radar");
-
-            bool boolResultOfPalindromeCheck = check.IsArrayPalindrome(arrToCheck);
-
-            Assert.AreEqual(true, boolResultOfPalindromeCheck);
+            RunIsPalindromeTest(RandomPalindromeGenerator(), true);
         }
+
         [TestMethod]
-        public void Check_Odd_Palindrome_Two()
+        public void Test_Case_Insensitive()
         {
-            Palindrome check = new Palindrome();
-            char[] arrToCheck = check.PalindromeHelper("catytac");
-
-            bool boolResultOfPalindromeCheck = check.IsArrayPalindrome(arrToCheck);
-
-            Assert.AreEqual(true, boolResultOfPalindromeCheck);
+            RunIsPalindromeTest("OtTo", true);
         }
+
         [TestMethod]
-        public void Check_Even_Palindrome_One()
+        public void Test_Sentence_With_Random_Caps()
         {
-            Palindrome check = new Palindrome();
-            char[] arrToCheck = check.PalindromeHelper("Otto");
-
-            bool boolResultOfPalindromeCheck = check.IsArrayPalindrome(arrToCheck);
-
-            Assert.AreEqual(true, boolResultOfPalindromeCheck);
+            RunIsPalindromeTest("Murder for a JAR of reD rum", true);
         }
+
         [TestMethod]
-        public void Check_Even_Palindrome_Two()
+        public void Test_False_Output()
         {
-            Palindrome check = new Palindrome();
-            char[] arrToCheck = check.PalindromeHelper("Hannah");
-
-            bool boolResultOfPalindromeCheck = check.IsArrayPalindrome(arrToCheck);
-
-            Assert.AreEqual(true, boolResultOfPalindromeCheck);
-        }
-        [TestMethod]
-        public void Check_Non_Palindrome_Outer_Chars_Do_Not_Match()
-        {
-            Palindrome check = new Palindrome();
-            char[] arrToCheck = check.PalindromeHelper("aooooooob");
-
-            bool boolResultOfPalindromeCheck = check.IsArrayPalindrome(arrToCheck);
-
-            Assert.AreEqual(false, boolResultOfPalindromeCheck);
-        }
-        [TestMethod]
-        public void Check_Palindrome_Inner_Chars_Do_Not_Match()
-        {
-            Palindrome check = new Palindrome();
-            char[] arrToCheck = check.PalindromeHelper("oooabooo");
-
-            bool boolResultOfPalindromeCheck = check.IsArrayPalindrome(arrToCheck);
-
-            Assert.AreEqual(false, boolResultOfPalindromeCheck);
-        }
-        [TestMethod]
-        public void Check_Sentence_Palindrome()
-        {
-            Palindrome check = new Palindrome();
-            char[] arrToCheck = check.PalindromeHelper("Murder for a jar of red rum");
-
-            bool boolResultOfPalindromeCheck = check.IsArrayPalindrome(arrToCheck);
-
-            Assert.AreEqual(true, boolResultOfPalindromeCheck);
-        }
-        [TestMethod]
-        public void Check_Sentence_Non_Palindrome()
-        {
-            Palindrome check = new Palindrome();
-            char[] arrToCheck = check.PalindromeHelper("This.. is345 A senTence...");
-
-            bool boolResultOfPalindromeCheck = check.IsArrayPalindrome(arrToCheck);
-
-            Assert.AreEqual(false, boolResultOfPalindromeCheck);
+            RunIsPalindromeTest("NotAPal", false);
         }
     }
 }

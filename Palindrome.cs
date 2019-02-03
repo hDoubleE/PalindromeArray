@@ -1,25 +1,45 @@
 ﻿using System;
 
-namespace PalindromeArray
+namespace Palindrome
 {
-    public class Palindrome
+    public sealed class Palindrome
     {
-        public bool IsArrayPalindrome(char[] arr)
+        /// <summary>
+        /// Method checks if input string is a palindrome.
+        /// Altered method to accept string input instead of char Array.
+        /// Functionally they are equivalent.
+        /// Modified to execute without duplicating strings using 
+        /// minimum space complexity.
+        /// </summary>
+        /// <param name="arr">A character array.</param>
+        /// <returns>Boolean result</returns>
+        public bool IsPalindrome(string strInput)
         {
-            if (arr.Length == 0)
+            // Defines empty input as NOT a palindrome.
+            if (String.IsNullOrEmpty(strInput))
             {
-                return false;
+                throw new ArgumentNullException(nameof(strInput));
             }
 
-            int start = 0;
-            int end = arr.Length - 1;
+            int left = 0;
+            int right = strInput.Length - 1;
 
-            while (start <= end)
+            while (left < right)
             {
-                if (arr[start] == arr[end])
+                // Skip over spaces to allow for sentences.
+                if (strInput[left] == ' ')
                 {
-                    start++;
-                    end--;
+                    left++;
+                }
+                if (strInput[right] == ' ')
+                {
+                    right--;
+                }
+                // Call case insensitive method.
+                if (AreEqualCaseInsensitive(strInput[left], strInput[right]))
+                {
+                    left++;
+                    right--;
                 }
                 else
                 {
@@ -28,15 +48,26 @@ namespace PalindromeArray
             }
             return true;
         }
-        public char[] PalindromeHelper(string s)
+
+        /// <summary>
+        /// Compares two characters for case insensitive equality in-place.
+        /// </summary>
+        /// <param name="left">left char</param>
+        /// <param name="right">right char</param>
+        /// <returns>
+        /// Returns bool result of match to calling method.
+        /// </returns>
+        private static bool AreEqualCaseInsensitive(char left, char right)
         {
-            // Tests failed on Names and Sentences due to white space.
-            // Had to use String.Replace and ToLower methods in helper
-            // to fix input...is this right?
-            // Is pre-gaming the input cheating...or does the method need work?
-            string fixString = s.ToLower().Replace(" ", String.Empty);
-            char[] charArray = fixString.ToCharArray();
-            return charArray;
+            if (left == right)
+            {
+                return true;
+            }
+            if (char.IsLetter(left) && char.IsLetter(right))
+            {
+                return char.ToLower(left) == char.ToLower(right);
+            }
+            return false;
         }
     }
 }
